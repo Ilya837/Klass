@@ -1,6 +1,8 @@
 #pragma once
 #include <iostream>
-#include <vector>;
+#include <vector>
+#include <fstream>
+#include <string>
 
 
 using namespace std;
@@ -20,7 +22,7 @@ class Sklad
 private:
 	vector<tovar> skl;
 public:
-	Sklad(ifstream file);
+	Sklad(const string& addres);
 	tovar search(string shtrih);
 
 
