@@ -1,35 +1,58 @@
 #include "Sklad.h"
 
-Sklad::Sklad(const string& addres)
+Sklad::Sklad()
 {
-    ifstream file(addres);
+    setlocale(LC_ALL, "Russian");
+    ifstream file(path);
     string line;
     if (file.is_open())
     {
         tovar t;
-        int16_t i = 0;
+        int16_t i = 0; 
+        set<int> l;
+
         while (getline(file,line))
-        {
-            switch (i % 4) {
-            case 0: t.shtrih = line; break;
-            case 1: t.name = line; break;
-            case 2: t.cena =  conv(line); break;
-            case 3: t.sale = conv(line); skl.push_back(t);
-            }
+        {            
+             t.shtrih = stoi(line); 
+             getline(file, line);
+             t.name = line; 
+             getline(file, line);
+             t.cena =  stoi(line); 
+             getline(file, line);
+             t.sale = stoi(line); 
+             skl.push_back(t);
+             assert(l.find(t.shtrih) == l.end());
+             l.insert(t.shtrih);
         }
     }
     file.close();    
 }
 
-tovar Sklad::search(string shtrih)
+tovar Sklad::search(int16_t _shtrih)
 {
-    return tovar();
+    for (tovar x : skl) {
+        if (x.shtrih == _shtrih) {
+            return x;
+        }
+    }
+    tovar t;
+    t.shtrih = 10000;
+    return t;
 }
 
-int conv(const string& str) {
-    int num = NULL;
-    for (int i = 0; i < str.length(); i++) {
-        num = num * 10 + str[i] - '0';
+tovar Sklad::search(const string& _name)
+{
+    for (tovar x : skl) {
+        if (x.name == _name) {
+            return x;
+        }
     }
-    return num;
+    tovar t;
+    t.shtrih = 10000;
+    return t;
+}
+
+bool operator==(tovar a, tovar b)
+{
+        return a.shtrih == b.shtrih;
 }
